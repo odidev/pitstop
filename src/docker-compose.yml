@@ -10,6 +10,8 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+    networks:
+      - testservice
     environment:
       - RABBITMQ_CONFIG_FILE=/etc/pitstop/rabbitmq.conf
 
@@ -20,6 +22,8 @@ services:
       - sqlserverdata:/var/opt/mssql
     ports:
       - "1434:1433"
+    networks:
+      - testservice
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Developer
@@ -31,12 +35,16 @@ services:
     ports:
       - "25:25"
       - "4000:80"
+    networks:
+      - testservice
 
   logserver:
     image: datalust/seq:latest
     container_name: logserver
     ports:
       - "5341:80"
+    networks:
+      - testservice
     environment:
       - ACCEPT_EULA=Y
 
@@ -48,6 +56,8 @@ services:
       - sqlserver
     ports:
       - "5000"
+    networks:
+      - testservice
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
 
@@ -59,6 +69,8 @@ services:
       - sqlserver
     ports:
       - "5100"
+    networks:
+      - testservice
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
 
@@ -70,6 +82,8 @@ services:
       - sqlserver
     ports:
       - "5200"
+    networks:
+      - testservice
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
 
@@ -79,6 +93,8 @@ services:
     container_name: auditlogservice
     depends_on:
       - rabbitmq
+    networks:
+      - testservice
     environment:
       - DOTNET_ENVIRONMENT=Production
 
@@ -90,6 +106,8 @@ services:
       - rabbitmq
       - sqlserver
       - mailserver
+    networks:
+      - testservice
     environment:
       - DOTNET_ENVIRONMENT=Production
 
@@ -101,6 +119,8 @@ services:
       - rabbitmq
       - sqlserver
       - mailserver
+    networks:
+      - testservice
     environment:
       - DOTNET_ENVIRONMENT=Production
 
@@ -110,6 +130,8 @@ services:
     container_name: timeservice
     depends_on:
       - rabbitmq
+    networks:
+      - testservice
     environment:
       - DOTNET_ENVIRONMENT=Production
 
@@ -120,6 +142,8 @@ services:
     depends_on:
       - rabbitmq
       - sqlserver
+    networks:
+      - testservice
     environment:
       - DOTNET_ENVIRONMENT=Production
 
@@ -133,6 +157,8 @@ services:
       - workshopmanagementapi
     ports:
       - "7005:7005"
+    networks:
+      - testservice
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
 
@@ -141,3 +167,8 @@ volumes:
     external: true
   rabbitmqdata:
     external: true
+
+networks:
+  testservice:
+    external:
+      name: testservice
